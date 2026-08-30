@@ -15,6 +15,7 @@
     "start:prod": "node dist/main",
     "seed:admin": "ts-node -r tsconfig-paths/register src/scripts/seed-admin.ts",
     "seed:profile": "ts-node -r tsconfig-paths/register src/scripts/seed-profile.ts",
+    "seed:site-settings": "ts-node -r tsconfig-paths/register src/scripts/seed-site-settings.ts",
     "lint": "oxlint src/ test/",
     "test": "jest",
     "test:watch": "jest --watch",
