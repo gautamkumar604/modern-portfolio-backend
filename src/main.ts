@@ -25,6 +25,15 @@ async function bootstrap() {
   // Parse cookies
   app.use(cookieParser());
 
+  // Set standard HTTP security headers
+  app.use((req: any, res: any, next: any) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
+
   // Set global API prefix
   app.setGlobalPrefix('api');
 
