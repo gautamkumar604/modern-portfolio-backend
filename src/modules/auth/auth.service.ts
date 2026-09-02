@@ -20,7 +20,7 @@ export class AuthService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   private getCookieOptions() {
     const isProd = this.configService.get<string>('NODE_ENV') === 'production';
