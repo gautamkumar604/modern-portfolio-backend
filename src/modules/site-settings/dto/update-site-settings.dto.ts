@@ -20,11 +20,11 @@ export class UpdateSiteSettingsDto {
   tagline?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: 'Favicon URL must be a valid URL' })
+  @IsString({ message: 'Favicon URL must be a string' })
   faviconUrl?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: 'Logo URL must be a valid URL' })
+  @IsString({ message: 'Logo URL must be a string' })
   logoUrl?: string;
 
   @IsOptional()
@@ -43,7 +43,7 @@ export class UpdateSiteSettingsDto {
   keywords?: string[];
 
   @IsOptional()
-  @IsUrl({}, { message: 'OG Image URL must be a valid URL' })
+  @IsString({ message: 'OG Image URL must be a string' })
   ogImageUrl?: string;
 
   @IsOptional()

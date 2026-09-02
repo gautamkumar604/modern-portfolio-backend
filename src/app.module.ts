@@ -18,6 +18,7 @@ import { ServicesModule } from './modules/services/services.module';
 import { SocialLinksModule } from './modules/social-links/social-links.module';
 import { MessagesModule } from './modules/messages/messages.module';
 import { SiteSettingsModule } from './modules/site-settings/site-settings.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { SiteSettingsModule } from './modules/site-settings/site-settings.module
     SocialLinksModule,
     MessagesModule,
     SiteSettingsModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [

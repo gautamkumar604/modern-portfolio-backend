@@ -38,12 +38,12 @@ export class CreateProjectDto {
   detailedDescription?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: 'Cover image must be a valid URL' })
+  @IsString({ message: 'Cover image must be a string' })
   coverImage?: string;
 
   @IsOptional()
   @IsArray()
-  @IsUrl({}, { each: true, message: 'Each gallery image must be a valid URL' })
+  @IsString({ each: true, message: 'Each gallery image must be a string' })
   galleryImages?: string[];
 
   @IsArray({ message: 'Technologies must be an array' })
@@ -52,11 +52,11 @@ export class CreateProjectDto {
   technologies: string[];
 
   @IsOptional()
-  @IsUrl({}, { message: 'GitHub URL must be a valid URL' })
+  @IsString({ message: 'GitHub URL must be a string' })
   githubUrl?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: 'Live demo URL must be a valid URL' })
+  @IsString({ message: 'Live demo URL must be a string' })
   liveDemoUrl?: string;
 
   @IsOptional()
