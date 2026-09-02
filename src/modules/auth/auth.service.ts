@@ -1,6 +1,7 @@
 import {
   Injectable,
   UnauthorizedException,
+  BadRequestException,
   Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -11,6 +12,7 @@ import * as bcrypt from 'bcryptjs';
 import type { Response } from 'express';
 import { User, UserDocument } from '../users/schemas/user.schema';
 import { LoginDto } from './dto/login.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -133,6 +135,66 @@ export class AuthService {
       role: user.role,
       isActive: user.isActive,
       lastLogin: user.lastLogin,
+    };
+  }
+
+  async changePassword(
+    userId: string,
+    changePasswordDto: ChangePasswordDto,
+    response: Response,
+  ) {
+    const { currentPassword, newPassword, confirmPassword } = changePasswordDto;
+
+    // 1. Confirm passwords match
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestException(
+        'New password and confirmation password do not match',
+      );
+    }
+
+    // 2. Fetch authenticated user explicitly including +passwordHash
+    const user = await this.userModel
+      .findById(userId)
+      .select('+passwordHash')
+      .exec();
+
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('User not found or account is inactive');
+    }
+
+    // 3. Verify current password
+    const isCurrentValid = await bcrypt.compare(
+      currentPassword,
+      user.passwordHash,
+    );
+    if (!isCurrentValid) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    // 4. Verify new password is not identical to current password
+    const isSamePassword = await bcrypt.compare(
+      newPassword,
+      user.passwordHash,
+    );
+    if (isSamePassword) {
+      throw new BadRequestException(
+        'New password must be different from current password',
+      );
+    }
+
+    // 5. Hash new password and save
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+    user.passwordHash = newPasswordHash;
+    await user.save();
+
+    // 6. Clear current browser authentication cookie
+    response.clearCookie('access_token', this.getCookieOptions());
+
+    this.logger.log(`Password changed successfully for user ID: ${userId}`);
+
+    return {
+      message:
+        'Password changed successfully. Please log in again with your new password.',
     };
   }
 }
