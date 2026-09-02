@@ -28,14 +28,34 @@ async function bootstrap() {
   // Set global API prefix
   app.setGlobalPrefix('api');
 
-  // Configure CORS using environment variable
-  const clientOrigin =
+  // Configure CORS using environment variable & local dev fallbacks
+  const rawClientOrigin =
     configService.get<string>('CLIENT_ORIGIN') ||
     configService.get<string>('clientOrigin') ||
     'http://localhost:3000';
+  const configuredOrigin = rawClientOrigin.replace(/\/+$/, '');
+
+  const allowedOrigins = [
+    configuredOrigin,
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+  ];
 
   app.enableCors({
-    origin: clientOrigin,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/+$/, '');
+      if (
+        allowedOrigins.includes(cleanOrigin) ||
+        cleanOrigin.startsWith('http://localhost:') ||
+        cleanOrigin.startsWith('http://127.0.0.1:')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, cleanOrigin);
+    },
     credentials: true,
   });
 
