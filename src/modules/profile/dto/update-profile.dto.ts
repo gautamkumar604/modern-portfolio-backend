@@ -65,7 +65,7 @@ export class UpdateProfileDto {
   detailedBio?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: 'Avatar URL must be a valid URL' })
+  @IsString({ message: 'Avatar URL must be a string' })
   avatarUrl?: string;
 
   @IsOptional()
@@ -82,7 +82,7 @@ export class UpdateProfileDto {
   phone?: string;
 
   @IsOptional()
-  @IsUrl({}, { message: 'Resume URL must be a valid URL' })
+  @IsString({ message: 'Resume URL must be a string' })
   resumeUrl?: string;
 
   @IsOptional()
