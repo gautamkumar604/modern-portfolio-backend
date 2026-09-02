@@ -10,6 +10,7 @@
     "types": ["node", "jest"],
     "sourceMap": true,
     "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/tsconfig.build.tsbuildinfo",
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
