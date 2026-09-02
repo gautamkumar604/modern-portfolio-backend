@@ -27,19 +27,31 @@ export class AuthService {
     const cookieSecureConfig = this.configService.get<boolean>('cookieSecure');
     const cookieSecureEnv = this.configService.get<string>('COOKIE_SECURE');
 
-    const secure =
-      cookieSecureConfig !== undefined
-        ? cookieSecureConfig
-        : cookieSecureEnv === 'true' || isProd;
+    let secure = false;
+    if (cookieSecureEnv !== undefined && cookieSecureEnv !== '') {
+      secure = cookieSecureEnv === 'true';
+    } else if (cookieSecureConfig !== undefined) {
+      secure = cookieSecureConfig;
+    } else {
+      secure = isProd;
+    }
 
     const cookieSameSiteConfig = this.configService.get<string>('cookieSameSite');
     const cookieSameSiteEnv = this.configService.get<string>('COOKIE_SAME_SITE');
 
-    const sameSite = (
-      cookieSameSiteConfig ||
-      cookieSameSiteEnv ||
-      (isProd ? 'none' : 'lax')
-    ) as 'lax' | 'strict' | 'none';
+    const envSameSite = (cookieSameSiteConfig || cookieSameSiteEnv || '') as string;
+    let sameSite: 'lax' | 'strict' | 'none' = 'lax';
+
+    if (['lax', 'strict', 'none'].includes(envSameSite)) {
+      sameSite = envSameSite as 'lax' | 'strict' | 'none';
+    } else {
+      sameSite = secure ? 'none' : 'lax';
+    }
+
+    // Browsers reject SameSite=None if Secure is false (e.g. unencrypted HTTP).
+    if (!secure && sameSite === 'none') {
+      sameSite = 'lax';
+    }
 
     return {
       httpOnly: true,
