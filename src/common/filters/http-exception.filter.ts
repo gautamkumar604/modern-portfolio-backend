@@ -17,7 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status =
+    let status =
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
@@ -33,6 +33,24 @@ export class HttpExceptionFilter implements ExceptionFilter {
       } else {
         errorBody = { message: res };
       }
+    } else if (exception && (exception as any).name === 'ValidationError') {
+      const mongooseError = exception as any;
+      const messages = Object.values(mongooseError.errors || {}).map(
+        (err: any) => err.message || String(err),
+      );
+      status = HttpStatus.BAD_REQUEST;
+      errorBody = {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: messages.length > 0 ? messages : mongooseError.message,
+        error: 'Bad Request',
+      };
+    } else if (exception && (exception as any).name === 'CastError') {
+      status = HttpStatus.BAD_REQUEST;
+      errorBody = {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Invalid resource ID format',
+        error: 'Bad Request',
+      };
     } else if (exception instanceof Error) {
       this.logger.error(
         `Unhandled error processing ${request.method} ${request.url}: ${exception.message}`,
