@@ -9,6 +9,7 @@ import {
   Min,
   IsArray,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateEducationDto {
   @IsString()
@@ -58,6 +59,7 @@ export class CreateEducationDto {
   achievements?: string[];
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(0)
   displayOrder?: number;

@@ -8,6 +8,7 @@ import {
   Min,
   IsArray,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateServiceDto {
   @IsString()
@@ -34,6 +35,7 @@ export class CreateServiceDto {
   features?: string[];
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(0)
   displayOrder?: number;
