@@ -17,7 +17,7 @@ export class Skill {
   @Prop({ trim: true })
   icon?: string;
 
-  @Prop({ trim: true, maxlength: 250 })
+  @Prop({ trim: true, maxlength: 1000 })
   description?: string;
 
   @Prop({ default: 0 })
