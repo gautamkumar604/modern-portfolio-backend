@@ -50,7 +50,7 @@ import { AppController } from './app.controller';
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
-        limit: 120,
+        limit: 500,
       },
     ]),
     HealthModule,
