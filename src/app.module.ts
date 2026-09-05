@@ -20,6 +20,8 @@ import { MessagesModule } from './modules/messages/messages.module';
 import { SiteSettingsModule } from './modules/site-settings/site-settings.module';
 import { UploadModule } from './modules/upload/upload.module';
 
+import { AppController } from './app.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -65,7 +67,7 @@ import { UploadModule } from './modules/upload/upload.module';
     SiteSettingsModule,
     UploadModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_FILTER,
@@ -77,4 +79,4 @@ import { UploadModule } from './modules/upload/upload.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

@@ -34,8 +34,8 @@ async function bootstrap() {
     next();
   });
 
-  // Set global API prefix
-  app.setGlobalPrefix('api');
+  // Set global API prefix (exclude root path for status message)
+  app.setGlobalPrefix('api', { exclude: ['/'] });
 
   // Configure CORS using environment variable & local dev fallbacks
   const rawClientOrigin =
