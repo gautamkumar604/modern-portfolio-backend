@@ -8,6 +8,7 @@ import {
   Max,
   MaxLength,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateSkillDto {
   @IsString()
@@ -21,6 +22,7 @@ export class CreateSkillDto {
   category: string;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt({ message: 'Proficiency must be an integer between 0 and 100' })
   @Min(0, { message: 'Proficiency cannot be less than 0' })
   @Max(100, { message: 'Proficiency cannot exceed 100' })
@@ -32,10 +34,11 @@ export class CreateSkillDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(250, { message: 'Description cannot exceed 250 characters' })
+  @MaxLength(500, { message: 'Description cannot exceed 500 characters' })
   description?: string;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(0)
   displayOrder?: number;

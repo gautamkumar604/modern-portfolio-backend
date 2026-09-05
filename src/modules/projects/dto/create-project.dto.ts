@@ -13,6 +13,7 @@ import {
   Matches,
   ArrayMinSize,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProjectDto {
   @IsString()
@@ -68,6 +69,7 @@ export class CreateProjectDto {
   isPublished?: boolean;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(0)
   displayOrder?: number;
